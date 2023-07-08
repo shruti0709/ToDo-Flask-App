@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TODO App</title>
+</head>
+<body>
+    <h1>TODO List</h1>
+    <ul>
+        {% for todo in todos %}
+        <li>{{ todo }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Add a new TODO item:</h2>
+    <form id="todo-form" method="POST" action="/api/todo">
+        <input type="text" id="title" name="title" placeholder="Enter a task">
+        <button type="submit">Add</button>
+    </form>
+
+    <h2>Update a TODO item:</h2>
+    <form id="update-form" method="POST" action="/api/todo/0">
+        <input type="text" id="updated-title" name="title" placeholder="Enter an updated task">
+        <button type="submit">Update</button>
+    </form>
+
+    <h2>Delete a TODO item:</h2>
+    <form id="delete-form" method="POST" action="/api/todo/0">
+        <button type="submit">Delete</button>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function () {
+            $('#todo-form').submit(function (event) {
+                event.preventDefault();
+                var title = $('#title').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/todo',
+                    data: { 'title': title },
+                    success: function (response) {
+                        location.reload();
+                    }
+                });
+            });
+
+            $('#update-form').submit(function (event) {
+                event.preventDefault();
+                var updatedTitle = $('#updated-title').val();
+                $.ajax({
+                    type: 'PUT',
+                    url: '/api/todo/0', // Replace with the actual todo_id to update
+                    data: { 'title': updatedTitle },
+                    success: function (response) {
+                        location.reload();
+                    }
+                });
+            });
+
+            $('#delete-form').submit(function (event) {
+                event.preventDefault();
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/api/todo/0', // Replace with the actual todo_id to delete
+                    success: function (response) {
+                        location.reload();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
